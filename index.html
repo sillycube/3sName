@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>3s Name</title>
+		<meta name="description" content="Generate the best SaaS product names in 3s">
+        <meta property="og:url"                content="https://www.3sname.com" />
+        <meta property="og:type"               content="website" />
+        <meta property="og:title"              content="3s Name" />
+        <meta property="og:description"        content="Generate the best SaaS product names in 3s" />
+        <meta property="og:image"              content="./images/fb-share-image.png" />
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@BennyyChan">
+        <meta name="twitter:creator" content="@BennyyChan">
+        <meta name="twitter:title" content="3s Name">
+        <meta name="twitter:description" content="Generate the best SaaS product names in 3s">
+        <meta name="twitter:image" content="./images/fb-share-image.png">
+        <link rel="shortcut icon" href="./images/favicon2.png" type="image/x-icon">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <!-- Bulma Version 0.8.2-->
+        <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.2/css/bulma.min.css" />
+		<link rel="stylesheet" href="./css/kanban.css">
+        <link rel="stylesheet" type="text/css" href="./css/hero.css">
+        <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+    </head>
+    <body>
+		<div id="app">
+        <section class="hero is-info is-medium bg-img">
+            <div class="hero-head">
+                <nav class="navbar">
+                    <div class="container">
+                        <div class="navbar-brand">
+                            <a class="navbar-item is-size-4 logo-font" href="./">
+                                <!-- <img src="http://bulma.io/images/bulma-type-white.png" alt="Logo"> -->
+								3s Name
+                            </a>
+                            <span class="navbar-burger burger" data-target="navbarMenu">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </div>
+                        <div id="navbarMenu" class="navbar-menu">
+                            <div class="navbar-end">
+                                <div class="tabs is-right">
+                                    <ul>
+                                        <li class="is-active"><a>Home</a></li>
+                                        <!-- <li><a href="">About</a></li> -->
+                                    </ul>
+                                    <!-- <span class="navbar-item"> -->
+                                        <!-- <a class="button is-white is-outlined" href="https://github.com/BulmaTemplates/bulma-templates/blob/master/templates/hero.html"> -->
+                                            <!-- <span class="icon"> -->
+                                                <!-- <i class="fa fa-github"></i> -->
+                                            <!-- </span> -->
+                                            <!-- <span title="Hello from the other side">View Source</span> -->
+                                        <!-- </a> -->
+                                    <!-- </span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <h1 class="title">
+                    Get the best SaaS product names in 3s
+                    </h1>
+                    <h2 class="subtitle">
+                    Tired of finding suitable product names and matching with available domains? 3s Name helps you find the best names with common rules.
+                    </h2>
+					<div class="field">
+					  <div class="control has-icons-right">
+						<input  v-model="keyword" @keyup.enter="findName" class="input is-large" type="text" placeholder="Input 1 word, hit Enter">
+                        <!-- or 2 words separated by space -->
+						  <span class="icon is-right">
+							<i class="fa fa-search"></i>
+						  </span>
+					  </div>
+					</div>
+                </div>
+            </div>
+        </section>
+        <!-- <div class="box cta"> -->
+            <!-- <p class="has-text-centered"> -->
+                <!-- <span class="tag is-primary">New</span> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. -->
+            <!-- </p> -->
+        <!-- </div> -->
+        <section class="container cards-container" v-if="showResult">
+			<div class="tabs is-toggle is-centered main-menu" id="nav">
+				<ul>
+					<li data-target="pane-1" id="1" :class="{'is-active': isSelected('search')}">
+						<a @click="toggleResult('search')">
+							<span class="icon is-small"><i class="fa fa-search" aria-hidden="true"></i></span>
+							<span>Result</span>
+						</a>
+					</li>
+					<li data-target="pane-2" id="2" :class="{'is-active': isSelected('bookmark')}">
+						<a @click="toggleResult('bookmark')">
+							<span class="icon is-small"><i class="fa fa-star" aria-hidden="true"></i></span>
+							<span>Bookmark</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+            <div class="is-centered">
+                <table class="table center">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Domain</th>
+                      <!-- <th>Available?</th>
+                      <th>Price / y</th> -->
+                      <th v-if="type == 'search'">Save</th>
+                      <th v-else>Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody v-if="type == 'search'">
+                    <template v-for="result in results">
+                      <tr><th colspan="3">{{result.rule}}</th></tr>
+                      <tr v-for="(ruleResult, index) in result.ruleResults" :key="ruleResult.domain">
+                          <th>{{index + 1}}</th>
+                          <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
+                          <!-- <td>{{result.isAvailable}}</td>
+                          <td>{{result.price}}</td> -->
+                          <td>
+                              <span class="icon is-small" :class="{ 'has-text-warning': ruleResult.isBookmarked}">
+                                  <i class="fa fa-star" aria-hidden="true" @click="saveResult(ruleResult)"></i>
+                              </span>
+                          </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                  <tbody v-else>
+                    <tr v-for="(result, index) in results" :key="result.domain">
+                      <th>{{index + 1}}</th>
+                      <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + result.domain" target="_blank">{{result.domain}}</a></td>
+                      <!-- <td>{{result.isAvailable}}</td>
+                      <td>{{result.price}}</td> -->
+                      <td>
+                          <span class="icon is-small" :class="{ 'has-text-warning': result.isBookmarked}">
+                              <i class="fa fa-star" aria-hidden="true" @click="removeResult(result.domain, index)"></i>
+                          </span></td>
+                    </tr>
+                  </tbody>
+                </table>
+			</div>
+        </section>
+		</div>
+        <footer class="footer">
+		  <div class="content has-text-centered">
+			<p>
+			  <strong>3s Name</strong> is made by <a href="https://twitter.com/BennyyChan">Benny Chan</a>. <br/>The links are affiliated with domain companies. If you purchase a domain via the link, I will earn a commission to sustain the site with no harm to you.
+			</p>
+		  </div>
+		</footer>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="./js/saasNameApp.js"></script>
+    </body>
+</html>
