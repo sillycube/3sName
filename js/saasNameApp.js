@@ -18,8 +18,8 @@ var vm =  new Vue({
         specialTLDs: [".ai", ".app", ".co", ".io", ".ly", ".xyz"],
         adjectives: ["Cheap","Clear","Easy","Fast","High","Insta","Open","Smart"],
         noOfAdj: 5,
-        standardTLD: ".com"
-
+        standardTLD: ".com",
+		// domainsStr: ""
     },
     mounted: function () {
         this.results = this.searchResults;
@@ -34,6 +34,10 @@ var vm =  new Vue({
             return this.type == type;
         },
         findName: function() {
+			if (!this.keyword) {
+				alert("Please input a word!");
+				return;
+			}
             this.showResult = true;
             console.log("keyword = " + this.keyword);
             noOfWord = this.getNoOfWord();
@@ -43,6 +47,7 @@ var vm =  new Vue({
                 this.getExtensionResults();
                 this.getAdjectives();
                 this.getSpecialTLDs();
+				this.getDomainAvailability();
             }
         },
         getSpecialTLDs: function() { // rule: 1 word + special TLDs
@@ -73,7 +78,7 @@ var vm =  new Vue({
         },
         saveResult: function(result) { // bookmark a search result
             if (!result.isBookmarked) {
-                this.bookmarkResults.push({domain: result.domain, isBookmarked: true});
+                this.bookmarkResults.push({domain: result.domain, isAvailable: result.isAvailable, isBookmarked: true});
                 result.isBookmarked = true;
             }
         },
@@ -90,6 +95,37 @@ var vm =  new Vue({
                         return;
                     }
         },
+		getDomainAvailability: function() { // get domain availability from namecheap api
+			var domainsStr = this.getDomainsStrFromResult();
+			var vm = this;
+			var url;
+			if (location.hostname.includes('3sname.com'))
+				url = '/apis/domains/' + domainsStr + '/';
+			
+			axios
+				.get(url)
+				.then(function (response) {
+					console.log(response);
+					var domains = response.data.domains;
+					var i = 0;
+					for (searchResult of vm.searchResults)
+						for (ruleResult of searchResult.ruleResults) {
+							// ruleResult.isAvailable = domains[i].available;
+							Vue.set(ruleResult, 'isAvailable', domains[i].available);
+							i++;							
+						}
+				})
+				.catch(function (error) {
+					console.log(error);
+				})
+		},
+		getDomainsStrFromResult: function() { // merge the domain list into a string separated by comma
+			var domains = []
+			for (searchResult of this.searchResults)
+                for (ruleResult of searchResult.ruleResults)
+					domains.push(ruleResult.domain);
+			return domains.toString();
+		},
         getNoOfWord: function() {
             return this.keyword.split(' ').length;
         },

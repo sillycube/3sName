@@ -76,9 +76,9 @@
                     </h2>
 					<div class="field">
 					  <div class="control has-icons-right">
-						<input  v-model="keyword" @keyup.enter="findName" class="input is-large" type="text" placeholder="Input 1 word, hit Enter">
-                        <!-- or 2 words separated by space -->
-						  <span class="icon is-right">
+						<input  v-model="keyword" @keyup.enter="findName" class="input is-large" type="text" placeholder="Input 1 word, hit Enter"/>
+                        <!-- or 2 words separated by space -->						
+						  <span class="icon is-right" @click="findName">
 							<i class="fa fa-search"></i>
 						  </span>
 					  </div>
@@ -114,20 +114,20 @@
                     <tr>
                       <th>#</th>
                       <th>Domain</th>
-                      <!-- <th>Available?</th>
-                      <th>Price / y</th> -->
+                      <th>Available?</th>
+                      <!-- <th>Price / y</th> -->
                       <th v-if="type == 'search'">Save</th>
                       <th v-else>Remove</th>
                     </tr>
                   </thead>
                   <tbody v-if="type == 'search'">
                     <template v-for="result in results">
-                      <tr><th colspan="3">{{result.rule}}</th></tr>
+                      <tr><th colspan="4">{{result.rule}}</th></tr>
                       <tr v-for="(ruleResult, index) in result.ruleResults" :key="ruleResult.domain">
                           <th>{{index + 1}}</th>
                           <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
-                          <!-- <td>{{result.isAvailable}}</td>
-                          <td>{{result.price}}</td> -->
+                          <td>{{ruleResult.isAvailable}}</td>
+                          <!-- <td>{{result.price}}</td> -->
                           <td>
                               <span class="icon is-small" :class="{ 'has-text-warning': ruleResult.isBookmarked}">
                                   <i class="fa fa-star" aria-hidden="true" @click="saveResult(ruleResult)"></i>
@@ -140,8 +140,8 @@
                     <tr v-for="(result, index) in results" :key="result.domain">
                       <th>{{index + 1}}</th>
                       <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + result.domain" target="_blank">{{result.domain}}</a></td>
-                      <!-- <td>{{result.isAvailable}}</td>
-                      <td>{{result.price}}</td> -->
+                      <td>{{result.isAvailable}}</td>
+                      <!-- <td>{{result.price}}</td> -->
                       <td>
                           <span class="icon is-small" :class="{ 'has-text-warning': result.isBookmarked}">
                               <i class="fa fa-star" aria-hidden="true" @click="removeResult(result.domain, index)"></i>
@@ -159,7 +159,9 @@
 			</p>
 		  </div>
 		</footer>
-
+		
+		<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> <!-- Vue Dev version -->  -->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 		<script src="./js/saasNameApp.js"></script>
     </body>
