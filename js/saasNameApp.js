@@ -100,7 +100,7 @@ var vm =  new Vue({
 			var vm = this;
 			var url;
 			if (location.hostname.includes('3sname.com'))
-				url = '/apis/domains/' + domainsStr + '/';
+				url = 'https://api.3sname.com/apis/domains/' + domainsStr + '/';
 			
 			axios
 				.get(url)
