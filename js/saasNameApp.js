@@ -1,25 +1,28 @@
+Vue.directive('focus', {
+    inserted: function (el) {
+        el.focus()
+    }
+})
+
 var vm =  new Vue({
     el:"#app",
     data: {
         keyword: '',
         searchResults: [ // [{rule: "animal", ruleResults: []}, {...}]
-            // { id: 1, domain: 'abc.com', isAvailable: 'Y', price: '$8.8', cta: 'Buy Now'},
-            // { id: 2, domain: 'xyz.com', isAvailable: 'Y', price: '$12.8', cta: 'Buy Now'},
-            // { id: 1, domain: 'abc.com', isBookmarked: false},
-            // { id: 2, domain: 'xyz.com', isBookmarked: false},
+            // { id: 1, domain: 'abc.com', isAvailable: 'Y', price: '$8.8', isBookmarked: false},
+            // { id: 2, domain: 'xyz.com', isAvailable: 'Y', price: '$12.8', isBookmarked: false},
         ],
         results: [],
         bookmarkResults: [],
         type: 'search', // viewing search or bookmark
         showResult: false,
-        animalWords: ["Bear" ,"Bee", "Bug", "Cat", "Chimp", "Cow", "Dog", "Monkey", "Panda"],
+        animalWords: ["Bear" ,"Bee", "Bird", "Bug", "Cat", "Chimp", "Cow", "Dog", "Duck", "Fish", "Fox", "Hippo", "Kitten", "Lion", "Monkey", "Octopus", "Panda", "Pig", "Sheep", "Snake"],
         noOfAnimal: 5,
         extensions: ["hub", "hq", "io", "ify", "ly"],
         specialTLDs: [".ai", ".app", ".co", ".io", ".ly", ".xyz"],
-        adjectives: ["Cheap","Clear","Easy","Fast","High","Insta","Open","Smart"],
+        adjectives: ["Cheap","Clear","Cloud","Easy","Fast","Good","High","Insta","Open","Smart","Snap"],
         noOfAdj: 5,
         standardTLD: ".com",
-		// domainsStr: ""
     },
     mounted: function () {
         this.results = this.searchResults;
@@ -30,12 +33,20 @@ var vm =  new Vue({
         }
     },
     methods: {
+		isValidDomain: function() {
+			var regex = /^[a-zA-Z0-9-]+$/;
+			return regex.test(this.keyword);
+		},
         isSelected: function(type) {
             return this.type == type;
         },
         findName: function() {
 			if (!this.keyword) {
 				alert("Please input a word!");
+				return;
+			}
+			if (!this.isValidDomain()) {
+				alert("A domain can only contain letters, numbers and hyphen");
 				return;
 			}
             this.showResult = true;
@@ -78,7 +89,7 @@ var vm =  new Vue({
         },
         saveResult: function(result) { // bookmark a search result
             if (!result.isBookmarked) {
-                this.bookmarkResults.push({domain: result.domain, isAvailable: result.isAvailable, isBookmarked: true});
+                this.bookmarkResults.push({domain: result.domain, isAvailable: result.isAvailable, standardName: result.isStandardName,isBookmarked: true});
                 result.isBookmarked = true;
             }
         },
@@ -101,8 +112,6 @@ var vm =  new Vue({
 			var url;
 			if (location.hostname.includes('3sname.com'))
 				url = 'https://api.3sname.com/apis/domains/' + domainsStr + '/';
-			else // dev
-				url = 'https://dev.3sname.com/apis/domains/' + domainsStr + '/';
 			
 			axios
 				.get(url)
@@ -114,6 +123,7 @@ var vm =  new Vue({
 						for (ruleResult of searchResult.ruleResults) {
 							// ruleResult.isAvailable = domains[i].available;
 							Vue.set(ruleResult, 'isAvailable', domains[i].available);
+							Vue.set(ruleResult, 'isStandardName', domains[i].standardName);
 							i++;							
 						}
 				})
