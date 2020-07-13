@@ -137,10 +137,11 @@ var vm =  new Vue({
 						for (ruleResult of searchResult.ruleResults) {
 							// ruleResult.isAvailable = domains[i].available;
 							var isStandardName = domains[i].standardName;
+							var isAvailable = domains[i].available;
 							var rule = ruleResult.rule;
-							Vue.set(ruleResult, 'isAvailable', domains[i].available);							
+							Vue.set(ruleResult, 'isAvailable', isAvailable);							
 							Vue.set(ruleResult, 'isStandardName', isStandardName);	
-							if (isStandardName != 'Y') // remove default standard price
+							if (isAvailable == 'N' || isStandardName != 'Y') // remove default standard price if not available or not standard name
 								Vue.set(ruleResult, 'price', '');
 								
 							i++;							
