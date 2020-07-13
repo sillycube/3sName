@@ -57,6 +57,7 @@ var vm =  new Vue({
 				alert("A domain can only contain letters, numbers and hyphen");
 				return;
 			}
+			this.toggleResult('search');
             this.showResult = true;
             console.log("keyword = " + this.keyword);
             noOfWord = this.getNoOfWord();
