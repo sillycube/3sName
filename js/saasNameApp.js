@@ -19,13 +19,16 @@ var vm =  new Vue({
         animalWords: ["Bear" ,"Bee", "Bird", "Bug", "Cat", "Chimp", "Cow", "Dog", "Duck", "Fish", "Fox", "Hippo", "Kitten", "Lion", "Monkey", "Octopus", "Panda", "Pig", "Sheep", "Snake"],
         noOfAnimal: 5,
         extensions: ["hub", "hq", "io", "ify", "ly"],
-        specialTLDs: [".ai", ".app", ".co", ".io", ".ly", ".xyz"],
+        specialTLDs: [".com", ".ai", ".app", ".co", ".io", ".xyz", ".ly"],
         adjectives: ["Cheap","Clear","Cloud","Easy","Fast","Good","High","Insta","Open","Smart","Snap"],
         noOfAdj: 5,
         standardTLD: ".com",
+		domainPrices: [],
+		standardTLDPrice: '',
     },
     mounted: function () {
         this.results = this.searchResults;
+		this.getDomainPrices();
     },
     computed: {
         isEnglish: function() {
@@ -64,32 +67,36 @@ var vm =  new Vue({
         getSpecialTLDs: function() { // rule: 1 word + special TLDs
             var ruleResults = [];
             for (let i = 0; i < this.specialTLDs.length; i++)
-                ruleResults.push({domain: this.keyword + this.specialTLDs[i], isBookmarked: false})
+				if (i != this.specialTLDs.length - 1)
+					ruleResults.push({domain: this.keyword + this.specialTLDs[i], price: this.domainPrices[i].price, isBookmarked: false})
+				else // ly tld is not supported by namecheap
+					ruleResults.push({domain: this.keyword + this.specialTLDs[i], isBookmarked: false})
             this.searchResults.push({rule: "Special TLD", ruleResults: ruleResults})
         },
         getAdjectives: function() { // rule: adjective + 1 word
             var randomAdjectives = this.shuffle(this.adjectives);
             var ruleResults = [];
             for (let i = 0; i < this.noOfAdj; i++)
-                ruleResults.push({domain: randomAdjectives[i] + this.keyword + this.standardTLD, isBookmarked: false})
+                ruleResults.push({domain: randomAdjectives[i] + this.keyword + this.standardTLD, price: this.standardTLDPrice, isBookmarked: false}) // assume standard price
             this.searchResults.push({rule: "Adjective", ruleResults: ruleResults})
         },
         getExtensionResults: function() { // rule: 1 word + extension
             var ruleResults = [];
             for (let i = 0; i < this.extensions.length; i++)
-                ruleResults.push({domain: this.keyword + this.extensions[i] + this.standardTLD, isBookmarked: false})
+                ruleResults.push({domain: this.keyword + this.extensions[i] + this.standardTLD, price: this.standardTLDPrice, isBookmarked: false})
             this.searchResults.push({rule: "Extension", ruleResults: ruleResults})
         },
         getAnimalResults: function() { // rule: 1 word + animal
             var randomAnimals = this.shuffle(this.animalWords);
             var ruleResults = [];
             for (let i = 0; i < this.noOfAnimal; i++)
-                ruleResults.push({domain: this.keyword + randomAnimals[i] + this.standardTLD, isBookmarked: false})
+                ruleResults.push({domain: this.keyword + randomAnimals[i] + this.standardTLD, price: this.standardTLDPrice, isBookmarked: false})
             this.searchResults.push({rule: "Animal", ruleResults: ruleResults})
         },
         saveResult: function(result) { // bookmark a search result
             if (!result.isBookmarked) {
-                this.bookmarkResults.push({domain: result.domain, isAvailable: result.isAvailable, standardName: result.isStandardName,isBookmarked: true});
+				console.log(result);
+                this.bookmarkResults.push({domain: result.domain, isAvailable: result.isAvailable, isStandardName: result.isStandardName, price: result.price,isBookmarked: true});
                 result.isBookmarked = true;
             }
         },
@@ -122,10 +129,33 @@ var vm =  new Vue({
 					for (searchResult of vm.searchResults)
 						for (ruleResult of searchResult.ruleResults) {
 							// ruleResult.isAvailable = domains[i].available;
-							Vue.set(ruleResult, 'isAvailable', domains[i].available);
-							Vue.set(ruleResult, 'isStandardName', domains[i].standardName);
+							var isStandardName = domains[i].standardName;
+							var rule = ruleResult.rule;
+							Vue.set(ruleResult, 'isAvailable', domains[i].available);							
+							Vue.set(ruleResult, 'isStandardName', isStandardName);	
+							if (isStandardName != 'Y') // remove default standard price
+								Vue.set(ruleResult, 'price', '');
+								
 							i++;							
 						}
+				})
+				.catch(function (error) {
+					console.log(error);
+				})
+		},
+		getDomainPrices: function() {
+			// domainPrices
+			var url;
+			var vm = this;
+			if (location.hostname.includes('3sname.com'))
+				url = 'https://api.3sname.com/apis/domainPrices/';
+				
+			axios
+				.get(url)
+				.then(function (response) {
+					console.log(response);
+					vm.domainPrices = response.data.domainPrices;
+					vm.standardTLDPrice	= vm.domainPrices[0].price;				
 				})
 				.catch(function (error) {
 					console.log(error);

@@ -108,7 +108,7 @@
 					</li>
 				</ul>
 			</div>
-            <div class="is-centered">
+            <div class="is-centered table-container">
                 <table class="table center">
                   <thead>
                     <tr>
@@ -116,20 +116,20 @@
                       <th>Domain</th>
                       <th>Available?</th>
 					  <th>Standard Price?</th>
-                      <!-- <th>Price / y</th> -->
+                      <th>Price (1st year)</th>
                       <th v-if="type == 'search'">Save</th>
                       <th v-else>Remove</th>
                     </tr>
                   </thead>
                   <tbody v-if="type == 'search'">
                     <template v-for="result in results">
-                      <tr><th colspan="5">{{result.rule}}</th></tr>
+                      <tr><th colspan="6">{{result.rule}}</th></tr>
                       <tr v-for="(ruleResult, index) in result.ruleResults" :key="ruleResult.domain">
                           <th>{{index + 1}}</th>
                           <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
                           <td>{{ruleResult.isAvailable}}</td>
 						  <td>{{ruleResult.isStandardName}}</td>
-                          <!-- <td>{{result.price}}</td> -->
+                          <td>{{ruleResult.price}}</td>
                           <td>
                               <span class="icon is-small" :class="{ 'has-text-warning': ruleResult.isBookmarked}">
                                   <i class="fa fa-star" aria-hidden="true" @click="saveResult(ruleResult)"></i>
@@ -143,8 +143,8 @@
                       <th>{{index + 1}}</th>
                       <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + result.domain" target="_blank">{{result.domain}}</a></td>
                       <td>{{result.isAvailable}}</td>
-					  <td>{{result.standardName}}</td>
-                      <!-- <td>{{result.price}}</td> -->
+					  <td>{{result.isStandardName}}</td>
+                      <td>{{result.price}}</td>
                       <td>
                           <span class="icon is-small" :class="{ 'has-text-warning': result.isBookmarked}">
                               <i class="fa fa-star" aria-hidden="true" @click="removeResult(result.domain, index)"></i>
@@ -166,6 +166,6 @@
 		<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> --> <!-- Vue Dev version -->  
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-		<script src="./js/saasNameApp.js"></script>
+		<script src="./js/saasNameApp.js?v=0.20"></script>
     </body>
 </html>
