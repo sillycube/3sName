@@ -129,7 +129,7 @@
                           <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
                           <td>{{ruleResult.isAvailable}}</td>
 						  <td>{{ruleResult.isStandardName}}</td>
-                          <td>{{ruleResult.price}}</td>
+                          <td>{{ruleResult.price | dollar}}</td>
                           <td>
                               <span class="icon is-small" :class="{ 'has-text-warning': ruleResult.isBookmarked}">
                                   <i class="fa fa-star" aria-hidden="true" @click="saveResult(ruleResult)"></i>
@@ -144,7 +144,7 @@
                       <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + result.domain" target="_blank">{{result.domain}}</a></td>
                       <td>{{result.isAvailable}}</td>
 					  <td>{{result.isStandardName}}</td>
-                      <td>{{result.price}}</td>
+                      <td>{{result.price | dollar}}</td>
                       <td>
                           <span class="icon is-small" :class="{ 'has-text-warning': result.isBookmarked}">
                               <i class="fa fa-star" aria-hidden="true" @click="removeResult(result.domain, index)"></i>
