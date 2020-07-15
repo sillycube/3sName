@@ -21,24 +21,23 @@ var vm =  new Vue({
         bookmarkResults: [],
         type: 'search', // viewing search or bookmark
         showResult: false,
-        animalWords: ["Bear" ,"Bee", "Bird", "Bug", "Cat", "Chimp", "Cow", "Dog", "Duck", "Fish", "Fox", "Hippo", "Kitten", "Lion", "Monkey", "Octopus", "Panda", "Pig", "Sheep", "Snake"],
-        noOfAnimal: 5,
+        animalWords: ["Ant", "Ape", "Bat", "Bear" ,"Bee", "Bird", "Bug", "Cat", "Chimp", "Cow", "Crab", "Dog", "Dragon", "Duck", "Eagle", "Fish", "Fox", "Frog", "Goat", "Hamster", "Hippo", "Horse", "Joey", "Kiwi", "Kitten", "Lion", "Monkey", "Mouse", "Octopus", "Owl", "Panda", "Pig", "Rat", "Rabbit", "Shark", "Sheep", "Snail", "Snake", "Spider", "Squid", "Tiger", "Toad", "Turtle", "Whale", "Wolf", "Worm", "Yak", "Zebra"],
+        noOfAnimal: 10,
         extensions: ["hub", "hq", "io", "ify", "ly"],
         specialTLDs: [".com", ".ai", ".app", ".co", ".io", ".xyz", ".ly"],
-        adjectives: ["Cheap","Clear","Cloud","Easy","Fast","Good","High","Insta","Open","Smart","Snap"],
+        adjectives: ["Air","Big","Cheap","Clear","Cloud","Easy","Fast","Good","High","Insta","Low","Lucky","Open","Power","Rapid","Smart","Small","Snap","Super"],
         noOfAdj: 5,
         standardTLD: ".com",
 		domainPrices: [],
 		standardTLDPrice: '',
     },
+	created: function () {	
+		this.getDomainPrices();
+	},
     mounted: function () {
         this.results = this.searchResults;
-		this.getDomainPrices();
     },
     computed: {
-        isEnglish: function() {
-
-        }
     },
     methods: {
 		isValidDomain: function() {
@@ -140,9 +139,11 @@ var vm =  new Vue({
 							var rule = ruleResult.rule;
 							Vue.set(ruleResult, 'isAvailable', isAvailable);							
 							Vue.set(ruleResult, 'isStandardName', isStandardName);	
-							if (isAvailable == 'N' || isStandardName != 'Y') // remove default standard price if not available or not standard name
+							if (isAvailable == 'Y' && isStandardName == 'N') // premium price
+								Vue.set(ruleResult, 'price', parseFloat(domains[i].premiumRegistrationPrice).toFixed(2));
+							else if (isAvailable == 'N' || isStandardName != 'Y') // remove default standard price if not available or not standard name
 								Vue.set(ruleResult, 'price', '');
-								
+							 
 							i++;							
 						}
 				})
@@ -150,8 +151,7 @@ var vm =  new Vue({
 					console.log(error);
 				})
 		},
-		getDomainPrices: function() {
-			// domainPrices
+		getDomainPrices: function() { // get domainPrices from server		
 			var url;
 			var vm = this;
 			if (location.hostname.includes('3sname.com'))
