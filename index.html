@@ -125,7 +125,7 @@
                       <th>#</th>
                       <th>Domain</th>
                       <th>Available?</th>
-					  <th>Standard Price?</th>
+					  <!-- <th>Standard Price?</th> -->
                       <th>Price (1st year)</th>
                       <th v-if="type == 'search'">Save</th>
                       <th v-else>Remove</th>
@@ -138,7 +138,7 @@
                           <th>{{index + 1}}</th>
                           <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
                           <td>{{ruleResult.isAvailable}}</td>
-						  <td>{{ruleResult.isStandardName}}</td>
+						  <!-- <td>{{ruleResult.isStandardName}}</td> -->
                           <td>{{ruleResult.price | dollar}}</td>
                           <td>
                               <span class="icon is-small" :class="{ 'has-text-warning': ruleResult.isBookmarked}">
