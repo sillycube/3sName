@@ -30,7 +30,8 @@
         <meta name="twitter:description" content="Generate the best startup business names in 3s">
         <meta name="twitter:image" content="https://3sname.com/images/fb-share-image.png">
         <link rel="shortcut icon" href="./images/favicon2.png" type="image/x-icon">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+		<script src="https://kit.fontawesome.com/7d3931b5de.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
         <!-- Bulma Version 0.8.2-->
@@ -133,7 +134,10 @@
                   </thead>
                   <tbody v-if="type == 'search'">
                     <template v-for="result in results">
-                      <tr><th colspan="6">{{result.rule}}</th></tr>
+                      <tr><th colspan="6">{{result.rule}} 
+						<!-- <i class="far fa-plus-square"></i> -->
+						</th>
+					  </tr>
                       <tr v-for="(ruleResult, index) in result.ruleResults" :key="ruleResult.domain">
                           <th>{{index + 1}}</th>
                           <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
@@ -167,6 +171,7 @@
 		</div>
         <footer class="footer">
 		  <div class="content has-text-centered">
+			<a href="https://www.producthunt.com/posts/3sname?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-3sname" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=217696&theme=light" alt="3sName - Get the Best Startup Names in 3s | Product Hunt Embed" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
 			<p>
 			  <strong>3sName Startup Business Name Generator</strong> is made by <a href="https://twitter.com/BennyyChan">Benny Chan</a>. <br/>The links are affiliated with domain companies. If you purchase a domain via the link, I will earn a commission to sustain the site with no harm to you.
 			</p>
