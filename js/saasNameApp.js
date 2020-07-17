@@ -30,6 +30,7 @@ var vm =  new Vue({
         standardTLD: ".com",
 		domainPrices: [],
 		standardTLDPrice: '',
+		toggleAllNames: true,
     },
 	created: function () {	
 		this.getDomainPrices();
@@ -58,6 +59,7 @@ var vm =  new Vue({
 			}
 			this.toggleResult('search');
             this.showResult = true;
+			this.toggleAllNames = true;
             console.log("keyword = " + this.keyword);
             noOfWord = this.getNoOfWord();
             if (noOfWord == 1) {
@@ -139,6 +141,7 @@ var vm =  new Vue({
 							var rule = ruleResult.rule;
 							Vue.set(ruleResult, 'isAvailable', isAvailable);							
 							Vue.set(ruleResult, 'isStandardName', isStandardName);	
+							Vue.set(ruleResult, 'isShow', isAvailable == 'Y');	
 							if (isAvailable == 'Y' && isStandardName == 'N') // premium price
 								Vue.set(ruleResult, 'price', parseFloat(domains[i].premiumRegistrationPrice).toFixed(2));
 							else if (isAvailable == 'N' || isStandardName != 'Y') // remove default standard price if not available or not standard name
@@ -174,6 +177,19 @@ var vm =  new Vue({
                 for (ruleResult of searchResult.ruleResults)
 					domains.push(ruleResult.domain);
 			return domains.toString();
+		},
+		showAllNames: function() {
+			for (searchResult of this.searchResults)
+                for (ruleResult of searchResult.ruleResults)
+					Vue.set(ruleResult, 'isShow', true);	
+			this.toggleAllNames = false;
+			// console.log('finish show names');
+		},
+		hideUsedNames: function() {
+			for (searchResult of this.searchResults)
+                for (ruleResult of searchResult.ruleResults)
+					Vue.set(ruleResult, 'isShow', ruleResult.isAvailable == 'Y');
+			this.toggleAllNames = true;
 		},
         getNoOfWord: function() {
             return this.keyword.split(' ').length;
