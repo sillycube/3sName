@@ -27,6 +27,8 @@ var vm =  new Vue({
         specialTLDs: [".com", ".ai", ".app", ".co", ".io", ".xyz", ".ly"],
         adjectives: ["Air","Big","Cheap","Clear","Cloud","Easy","Fast","Fresh","Good","Great","High","Insta","Low","Lucky","Open","Power","Quick","Rapid","Re","Simple","Smart","Small","Snap","Super", "Un"],
         noOfAdj: 10,
+		physicsTerms: ['AbsoluteZero', 'Alpha','Ampere','Amplifier','Anion','Antimatter', 'Atmosphere','Beta', 'Carbon','Cathode','Conductor','Cosmic', 'Constant','Density','Decay','Dimension', 'Diode','Duality','Electrode','Electron','Element','Entropy','Fission','Fluid','Friction','Fuse','Fusion', 'Forces','Galaxy', 'Galaxies', 'Galileo','Gamma', 'Gradient','Gravity', 'Geodesic', 'Harmonic','Helix', 'Hertz','Horizon','Hubble','Hydrostatic','Hyperon','Ion','Inductive','Inertia','Interference','Kinetic','Liquid','Magnetic','Massive','Matter', 'Microwave', 'Molecules','Momentum','Motion','Neutrino','Neutron', 'Nuclear', 'Nucleus','Ohm', 'Particle', 'Plasma', 'Polymer','Positron','Principle', 'Propagation','Photon','Proton', 'Pulsar','Quark','Quantum','Quasar', 'Radiation', 'Radioactive', 'Redshift','Reflection','Refraction','Relativity', 'Resistance','Ripple','Spectrum','Superfluid','Supernovas','SuperString', 'Theory','Thermostat','Tension','Transformer','Watt','Wormhole','Ultraviolet', 'Universe','Vacuum','Velocity','Volt','Xray'],
+		noOfPhysics: 10,
         standardTLD: ".com",
 		domainPrices: [],
 		standardTLDPrice: '',
@@ -68,9 +70,17 @@ var vm =  new Vue({
                 this.getExtensionResults();
                 this.getAdjectives();
                 this.getSpecialTLDs();
+				this.getPhysicsTerms();
 				this.getDomainAvailability();
             }
         },
+		getPhysicsTerms: function() {
+			var randomPhysics = this.shuffle(this.physicsTerms);
+            var ruleResults = [];
+            for (let i = 0; i < this.noOfPhysics; i++)
+                ruleResults.push({domain: this.keyword + randomPhysics[i] + this.standardTLD, price: this.standardTLDPrice, isBookmarked: false}) // assume standard price
+            this.searchResults.push({rule: "Physics Terms", ruleResults: ruleResults})
+		},
         getSpecialTLDs: function() { // rule: 1 word + special TLDs
             var ruleResults = [];
             for (let i = 0; i < this.specialTLDs.length; i++)
