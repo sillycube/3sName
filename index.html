@@ -143,7 +143,7 @@
                       <tr v-for="(ruleResult, index) in result.ruleResults" :key="ruleResult.domain" 
 					  v-if="ruleResult.isShow">
                           <th>{{index + 1}}</th>
-                          <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank">{{ruleResult.domain}}</a></td>
+                          <td><a :href="'https://namecheap.pxf.io/c/2230440/386170/5618?u=https%3A%2F%2Fwww.namecheap.com%2Fdomains%2Fregistration%2Fresults.aspx%3Fdomain%3D' + ruleResult.domain" target="_blank" title="Click to Buy Domain">{{ruleResult.domain}}</a></td>
                           <td>{{ruleResult.isAvailable}}</td>
 						  <!-- <td>{{ruleResult.isStandardName}}</td> -->
                           <td>{{ruleResult.price | dollar}}</td>
