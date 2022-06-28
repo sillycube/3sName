@@ -136,6 +136,8 @@ var vm =  new Vue({
 			var url;
 			if (location.hostname.includes('3sname.com'))
 				url = 'https://api.3sname.com/apis/domains/' + domainsStr + '/';
+			else // dev
+				url = 'https://dev.3sname.com/apis/domains/' + domainsStr + '/';
 			
 			axios
 				.get(url)
@@ -169,6 +171,8 @@ var vm =  new Vue({
 			var vm = this;
 			if (location.hostname.includes('3sname.com'))
 				url = 'https://api.3sname.com/apis/domainPrices/';
+			else // dev
+				url = 'https://dev.3sname.com/apis/domainPrices/';
 				
 			axios
 				.get(url)
